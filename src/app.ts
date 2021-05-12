@@ -1,11 +1,11 @@
 import express from "express";
-import bodyParser from "body-parser";
+import {json} from "body-parser";
 import mongoose from "mongoose";
 // importing routers
-import OrdersCtrl from "./controllers/ordersController";
-import ProductsCtrl from "./controllers/productsController";
-import BlogCtrl from "./controllers/BlogController";
-import UserCtrl from "./controllers/UserController";
+import userController from './user/user.controller';
+import authController from './auth.controller';
+
+
 
 const dbName = "shopping";
 const mongoURI = `mongodb://localhost:27017/${dbName}`;
@@ -19,16 +19,17 @@ const db = mongoose.connect(mongoURI, {
   useCreateIndex: true,
 });
 
+
+
 db.then(() => {
   console.log("db connected");
-  app.use(express.static("uploads"));
-  app.use(bodyParser.json());
-  app.use("/order", OrdersCtrl);
-  app.use("/product", ProductsCtrl);
-  app.use("/blog", BlogCtrl);
-  app.use("/user", UserCtrl);
+  // app.use(express.static("uploads"));
+  app.use(json());
 
-  const port = 8080;
+  app.use("/user", userController)
+  app.use("/auth", authController)
+
+  const port = 3000;
   app.listen(port, () => {
     console.log("Server started at http://localhost:" + port);
   });
