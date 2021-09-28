@@ -1,9 +1,11 @@
+import 'express-async-error';
 import express from "express";
 import {json} from "body-parser";
 import mongoose from "mongoose";
 // importing routers
 import userController from './user/user.controller';
 import authController from './auth.controller';
+import productController from './products/product.controller';
 
 
 
@@ -23,11 +25,20 @@ const db = mongoose.connect(mongoURI, {
 
 db.then(() => {
   console.log("db connected");
-  // app.use(express.static("uploads"));
+  app.use("/uploads", express.static("uploads"));
   app.use(json());
 
   app.use("/user", userController)
   app.use("/auth", authController)
+  app.use("/product", productController)
+
+
+  app.use(function(err, req, res, next){
+    console.log(err);
+    
+    res.status(500).send('Something failed.');
+  })
+    
 
   const port = 3000;
   app.listen(port, () => {

@@ -1,4 +1,5 @@
 import { Document, Schema, model } from "mongoose";
+import { IProduct } from "../products/product.model"
 
 export interface IUser extends Document{
   email: string
